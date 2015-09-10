@@ -9,15 +9,10 @@ import android.view.MenuItem;
 import com.google.gson.Gson;
 
 import model.Book;
+import model.Dummy;
 
 public class ShoppingActivity extends AppCompatActivity {
 
-    private static final String jsonDummy = "{\n" +
-            "    \"isbn\": \"c8fabf68-8374-48fe-a7ea-a00ccd07afff\",\n" +
-            "    \"title\": \"Henri Potier à l'école des sorciers\",\n" +
-            "    \"price\": 35,\n" +
-            "    \"cover\": \"http://henri-potier.xebia.fr/hp0.jpg\"\n" +
-            "  }";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +20,7 @@ public class ShoppingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shopping);
         if(savedInstanceState == null) {
             Gson gson = new Gson();
-            Book b = gson.fromJson(jsonDummy, Book.class);
+            Book b = gson.fromJson(Dummy.JsonOneBook, Book.class);
             BookCardFragment f = BookCardFragment.newInstance(b, 0);
             getFragmentManager()
                     .beginTransaction()
