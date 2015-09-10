@@ -17,6 +17,10 @@ import model.Dummy;
 
 public class ShoppingActivity extends AppCompatActivity {
 
+    private static final String BOOK_CART_KEY = "BookCart";
+    private static final String BOOK_LIST_KEY = "BookList";
+    private static final String CURRENT_PAGE_KEY = "CurrentPage";
+
     @Bind(R.id.shopping_main_pager)
     ViewPager mPager;
 
@@ -31,16 +35,31 @@ public class ShoppingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
         ButterKnife.bind(this);
+        int current_page = 0;
         if(savedInstanceState == null) {
             mCart = new BookCart();
             Gson gson = new Gson();
             mBooks = gson.fromJson(Dummy.JsonAllBooks, Book[].class);
-
-            mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
-            mPager.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
         }
+        else {
+            mCart = savedInstanceState.getParcelable(BOOK_CART_KEY);
+            mBooks = (Book[])savedInstanceState.getParcelableArray(BOOK_LIST_KEY);
+            current_page = savedInstanceState.getInt(CURRENT_PAGE_KEY, 0);
+        }
+        mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
+
+        mPager.setAdapter(mAdapter);
+        mPager.setOffscreenPageLimit(5);
+        mPager.setCurrentItem(current_page);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle b){
+        b.putParcelable(BOOK_CART_KEY, mCart);
+        b.putParcelableArray(BOOK_LIST_KEY, mBooks);
+        b.putInt(CURRENT_PAGE_KEY, mPager.getCurrentItem());
+    }
+
 
 
     @Override
