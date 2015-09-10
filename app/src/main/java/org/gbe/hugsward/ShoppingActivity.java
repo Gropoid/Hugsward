@@ -23,13 +23,15 @@ public class ShoppingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
-        Gson gson = new Gson();
-        Book b = gson.fromJson(jsonDummy, Book.class);
-        BookCardFragment f = BookCardFragment.newInstance(b, 0);
-        getFragmentManager()
-                .beginTransaction()
-                .add(R.id.shopping_main_frame, f, "tag")
-                .commit();
+        if(savedInstanceState == null) {
+            Gson gson = new Gson();
+            Book b = gson.fromJson(jsonDummy, Book.class);
+            BookCardFragment f = BookCardFragment.newInstance(b, 0);
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.shopping_main_frame, f, "tag")
+                    .commit();
+        }
     }
 
 
