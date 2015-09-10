@@ -3,7 +3,8 @@
     <!--android:name="org.gbe.hugsward.BookCardFragment"-->
     <!--tools:layout="@layout/book_card_layout" android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent" />-->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/shopping_main_frame"
+<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shopping_main_pager"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/activity_horizontal_margin"/>

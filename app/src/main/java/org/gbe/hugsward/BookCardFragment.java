@@ -1,7 +1,9 @@
 package org.gbe.hugsward;
 
-import android.app.Fragment;
+
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import model.Book;
+import model.BookCart;
 
 /**
  * The fragment for adding or removing a given book from the shopping cart
@@ -22,9 +25,7 @@ import model.Book;
 public class BookCardFragment extends Fragment {
 
     private static final String BOOK_PARCEL_KEY = "Book";
-    private static final String QUANTITY_IN_BASKET_KEY = "QuantityInBasket";
-
-    private static final int MAX_ORDER = 10;
+    private static final String BOOK_CART_PARCEL_KEY = "BookCart";
 
     @Bind(R.id.book_card_image)
     ImageView ivBookCover;
@@ -39,19 +40,23 @@ public class BookCardFragment extends Fragment {
     TextView tvCounter;
 
     private Book mBook;
-
-    private Integer mQuantity;
+    private BookCart mCart;
 
     public BookCardFragment() {
     }
 
-    public static BookCardFragment newInstance(Book book, int qty) {
+    public static BookCardFragment newInstance(Book book, BookCart cart) {
         BookCardFragment f = new BookCardFragment();
         Bundle b = new Bundle();
         b.putParcelable(BOOK_PARCEL_KEY, book);
-        b.putInt(QUANTITY_IN_BASKET_KEY, qty);
+        b.putParcelable(BOOK_CART_PARCEL_KEY, cart);
         f.setArguments(b);
         return f;
+    }
+
+    @Override
+    public void onAttach(Activity a) {
+        super.onAttach(a);
     }
 
     @Override
@@ -59,11 +64,11 @@ public class BookCardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.book_card_layout, container, false);
         if (savedInstanceState != null) {
-            mBook = savedInstanceState.getParcelable("Book");
-            mQuantity = savedInstanceState.getInt("QuantityInBasket");
+            mBook = savedInstanceState.getParcelable(BOOK_PARCEL_KEY);
+            mCart = savedInstanceState.getParcelable(BOOK_CART_PARCEL_KEY);
         } else {
             mBook = getArguments().getParcelable(BOOK_PARCEL_KEY);
-            mQuantity = getArguments().getInt(QUANTITY_IN_BASKET_KEY);
+            mCart = getArguments().getParcelable(BOOK_CART_PARCEL_KEY);
         }
         ButterKnife.bind(this, v);
 
@@ -83,28 +88,28 @@ public class BookCardFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(BOOK_PARCEL_KEY, mBook);
-        outState.putInt(QUANTITY_IN_BASKET_KEY, mQuantity);
+        outState.putParcelable(BOOK_CART_PARCEL_KEY, mCart);
     }
 
     @OnClick(R.id.plus_button)
-    protected void  incrementQuantity(){
-        if( mQuantity < MAX_ORDER) {
-            mQuantity++;
+    protected void incrementQuantity(){
+        if(! mCart.isAtMaxOrdered(mBook)) {
+            mCart.add(mBook);
             onQuantityChanged();
         }
     }
 
     @OnClick(R.id.minus_button)
-    protected void  decrementQuantity() {
-        if( mQuantity > 0) {
-            mQuantity--;
+    protected void decrementQuantity() {
+        if( ! mCart.isAtMinOrdered(mBook)) {
+            mCart.remove(mBook);
             onQuantityChanged();
         }
     }
 
     private void onQuantityChanged() {
-        btnMinusButton.setEnabled(mQuantity > 0);
-        btnPlusButton.setEnabled(mQuantity < MAX_ORDER);
-        tvCounter.setText(mQuantity.toString());
+        btnMinusButton.setEnabled(!mCart.isAtMinOrdered(mBook));
+        btnPlusButton.setEnabled(!mCart.isAtMaxOrdered(mBook));
+        tvCounter.setText(mCart.getQuantity(mBook).toString());
     }
 }

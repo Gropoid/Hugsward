@@ -1,6 +1,6 @@
 package org.gbe.hugsward;
 
-import android.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,24 +8,37 @@ import android.view.MenuItem;
 
 import com.google.gson.Gson;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import model.Book;
+import model.BookCardFragmentPagerAdapter;
+import model.BookCart;
 import model.Dummy;
 
 public class ShoppingActivity extends AppCompatActivity {
+
+    @Bind(R.id.shopping_main_pager)
+    ViewPager mPager;
+
+    BookCardFragmentPagerAdapter mAdapter;
+
+    Book[] mBooks;
+    BookCart mCart;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
+        ButterKnife.bind(this);
         if(savedInstanceState == null) {
+            mCart = new BookCart();
             Gson gson = new Gson();
-            Book b = gson.fromJson(Dummy.JsonOneBook, Book.class);
-            BookCardFragment f = BookCardFragment.newInstance(b, 0);
-            getFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.shopping_main_frame, f, "tag")
-                    .commit();
+            mBooks = gson.fromJson(Dummy.JsonAllBooks, Book[].class);
+
+            mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
+            mPager.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -51,4 +64,5 @@ public class ShoppingActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
