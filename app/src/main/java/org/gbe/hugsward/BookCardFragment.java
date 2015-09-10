@@ -62,7 +62,7 @@ public class BookCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.book_card_layout, container, false);
+        View v = inflater.from(container.getContext()).inflate(R.layout.book_card_layout, container, false);
         if (savedInstanceState != null) {
             mBook = savedInstanceState.getParcelable(BOOK_PARCEL_KEY);
             mCart = savedInstanceState.getParcelable(BOOK_CART_PARCEL_KEY);

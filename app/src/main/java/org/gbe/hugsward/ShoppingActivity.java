@@ -14,6 +14,7 @@ import model.Book;
 import model.BookCardFragmentPagerAdapter;
 import model.BookCart;
 import model.Dummy;
+import model.ZoomOutPageTransformer;
 
 public class ShoppingActivity extends AppCompatActivity {
 
@@ -49,6 +50,7 @@ public class ShoppingActivity extends AppCompatActivity {
         mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
 
         mPager.setAdapter(mAdapter);
+        mPager.setPageTransformer(false, new ZoomOutPageTransformer());
         mPager.setOffscreenPageLimit(5);
         mPager.setCurrentItem(current_page);
     }
