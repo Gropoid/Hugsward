@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Hugsward</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_checkout">Check out</string>
 </resources>
