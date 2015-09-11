@@ -8,8 +8,15 @@
     card_view:elevation="@dimen/card_elevation"
     card_view:cardCornerRadius="@dimen/card_corner_radius"
     android:layout_margin="8dp"
-    android:foreground="?android:attr/selectableItemBackground"
+
     >
+
+    <View
+        android:id="@+id/vPalette"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_margin="@dimen/card_padding"
@@ -21,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="10"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             />
 
         <LinearLayout

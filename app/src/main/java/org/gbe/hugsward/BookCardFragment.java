@@ -2,8 +2,13 @@ package org.gbe.hugsward;
 
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,6 +33,9 @@ public class BookCardFragment extends Fragment {
     private static final String BOOK_PARCEL_KEY = "Book";
     private static final String BOOK_CART_PARCEL_KEY = "BookCart";
 
+    @Bind(R.id.book_card)
+    CardView cvBookCard;
+
     @Bind(R.id.book_card_image)
     ImageView ivBookCover;
 
@@ -39,8 +48,13 @@ public class BookCardFragment extends Fragment {
     @Bind(R.id.counter)
     TextView tvCounter;
 
+    @Bind(R.id.vPalette)
+    View vPalette;
+
     private Book mBook;
     private BookCart mCart;
+
+    private Target mTarget;
 
     public BookCardFragment() {
     }
@@ -70,6 +84,7 @@ public class BookCardFragment extends Fragment {
             mBook = getArguments().getParcelable(BOOK_PARCEL_KEY);
             mCart = getArguments().getParcelable(BOOK_CART_PARCEL_KEY);
         }
+        mTarget = new BookCoverTarget() ;
         ButterKnife.bind(this, v);
 
         return v;
@@ -80,8 +95,8 @@ public class BookCardFragment extends Fragment {
         super.onResume();
         Picasso.with(getActivity()).load(mBook.getCover())
                 .placeholder(R.drawable.progress_wheel_animation)
-                .fit().centerInside()
-                .into(ivBookCover);
+                .error(R.drawable.placeholder340_500)
+                .into(mTarget);
         onQuantityChanged();
     }
 
@@ -106,6 +121,38 @@ public class BookCardFragment extends Fragment {
             onQuantityChanged();
         }
     }
+
+    private class BookCoverTarget implements Target{
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            ivBookCover.setImageBitmap(bitmap);
+            ivBookCover.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            Palette.from(bitmap).generate(
+                    new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            Palette.Swatch vibrant = palette.getVibrantSwatch();
+                            Palette.Swatch muted = palette.getDarkVibrantSwatch();
+                            if (vibrant != null) {
+                                vPalette.setBackgroundColor(vibrant.getRgb());
+                            }
+                        }
+                    });
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            ivBookCover.setScaleType(ImageView.ScaleType.CENTER);
+            ivBookCover.setImageDrawable(errorDrawable);
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            ivBookCover.setScaleType(ImageView.ScaleType.CENTER);
+            ivBookCover.setImageDrawable(placeHolderDrawable);
+        }
+    }
+
 
     private void onQuantityChanged() {
         btnMinusButton.setEnabled(!mCart.isAtMinOrdered(mBook));

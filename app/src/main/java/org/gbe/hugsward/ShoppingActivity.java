@@ -51,7 +51,7 @@ public class ShoppingActivity extends AppCompatActivity {
 
         mPager.setAdapter(mAdapter);
         mPager.setPageTransformer(false, new ZoomOutPageTransformer());
-        mPager.setOffscreenPageLimit(7);
+        mPager.setOffscreenPageLimit(1);
         mPager.setCurrentItem(current_page, true);
     }
 
