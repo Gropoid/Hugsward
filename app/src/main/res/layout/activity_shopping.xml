@@ -1,13 +1,10 @@
-<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment"-->
-    <!--android:name="org.gbe.hugsward.BookCardFragment"-->
-    <!--tools:layout="@layout/book_card_layout" android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent" />-->
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.view.ViewPager
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/shopping_main_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/enough_room_for_card_shadow"/>
-    <!--android:layout_margin="0dp"-->
+
 
 

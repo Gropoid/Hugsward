@@ -1,4 +1,4 @@
-package model;
+package org.gbe.hugsward.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

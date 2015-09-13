@@ -1,4 +1,4 @@
-package model;
+package org.gbe.hugsward.model;
 
 /**
  * Created by gbe on 9/10/15.

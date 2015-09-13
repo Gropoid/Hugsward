@@ -1,9 +1,12 @@
-package model;
+package org.gbe.hugsward.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,6 +20,10 @@ public class BookCart implements Parcelable {
         mCart = new Hashtable<>();
     }
 
+    public Boolean isEmpty() {
+        return mCart.size() == 0;
+    }
+
     protected BookCart(Parcel in) {
         mCart = new Hashtable<>();
         Integer size = in.readInt();
@@ -28,9 +35,7 @@ public class BookCart implements Parcelable {
     }
 
     public Boolean isAtMaxOrdered(Book b) {
-        if (!mCart.containsKey(b))
-            return false;
-        return mCart.get(b) >= MAX_ORDER;
+        return mCart.containsKey(b) && mCart.get(b) >= MAX_ORDER;
     }
 
     public Boolean isAtMinOrdered(Book b){
@@ -91,6 +96,13 @@ public class BookCart implements Parcelable {
         }
     }
 
+    public List<Pair<Book, Integer>> getCartContents() {
+        List<Pair<Book, Integer>> list = new ArrayList<>();
+        for(Map.Entry e : mCart.entrySet()) {
+            list.add(new Pair<>((Book) e.getKey(), (Integer) e.getValue()));
+        }
+        return list;
+    }
 
     public static final Creator<BookCart> CREATOR = new Creator<BookCart>() {
         @Override
@@ -104,7 +116,6 @@ public class BookCart implements Parcelable {
         }
     };
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -117,5 +128,13 @@ public class BookCart implements Parcelable {
             dest.writeParcelable(entry.getKey(), 0);
             dest.writeInt(entry.getValue());
         }
+    }
+
+    public float getTotalPrice() {
+        float x = 0;
+        for(Book b : mCart.keySet()) {
+            x += (b.getPrice()) * mCart.get(b);
+        }
+        return x;
     }
 }

@@ -1,10 +1,11 @@
-package model;
+package org.gbe.hugsward.UI;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.gbe.hugsward.BookCardFragment;
+import org.gbe.hugsward.model.Book;
+import org.gbe.hugsward.model.BookCart;
 
 /**
  * Created by gbe on 9/10/15.

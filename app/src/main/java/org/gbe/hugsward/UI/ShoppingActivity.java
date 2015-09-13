@@ -1,5 +1,6 @@
-package org.gbe.hugsward;
+package org.gbe.hugsward.UI;
 
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,13 +10,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.gbe.hugsward.R;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import model.Book;
-import model.BookCardFragmentPagerAdapter;
-import model.BookCart;
-import model.Dummy;
-import model.ZoomOutPageTransformer;
+import org.gbe.hugsward.model.Book;
+import org.gbe.hugsward.model.BookCart;
+import org.gbe.hugsward.model.Dummy;
 
 public class ShoppingActivity extends AppCompatActivity {
 
@@ -58,12 +59,11 @@ public class ShoppingActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle b){
+        super.onSaveInstanceState(b);
         b.putParcelable(BOOK_CART_KEY, mCart);
         b.putParcelableArray(BOOK_LIST_KEY, mBooks);
         b.putInt(CURRENT_PAGE_KEY, mPager.getCurrentItem());
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,14 +74,14 @@ public class ShoppingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_checkout) {
-            Toast.makeText(this, "Get ready to check out the check-out...", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent();
+            i.setClass(this, CheckoutActivity.class);
+            i.putExtra(BOOK_CART_KEY, mCart);
+            startActivity(i);
             return true;
         }
 

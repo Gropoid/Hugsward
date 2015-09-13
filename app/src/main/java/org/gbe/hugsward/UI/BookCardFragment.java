@@ -1,9 +1,8 @@
-package org.gbe.hugsward;
+package org.gbe.hugsward.UI;
 
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,11 +18,13 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.gbe.hugsward.R;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import model.Book;
-import model.BookCart;
+import org.gbe.hugsward.model.Book;
+import org.gbe.hugsward.model.BookCart;
 
 /**
  * The fragment for adding or removing a given book from the shopping cart
@@ -76,7 +77,7 @@ public class BookCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.from(container.getContext()).inflate(R.layout.book_card_layout, container, false);
+        View v = inflater.inflate(R.layout.book_card_layout, container, false);
         if (savedInstanceState != null) {
             mBook = savedInstanceState.getParcelable(BOOK_PARCEL_KEY);
             mCart = savedInstanceState.getParcelable(BOOK_CART_PARCEL_KEY);
@@ -102,6 +103,7 @@ public class BookCardFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putParcelable(BOOK_PARCEL_KEY, mBook);
         outState.putParcelable(BOOK_CART_PARCEL_KEY, mCart);
     }

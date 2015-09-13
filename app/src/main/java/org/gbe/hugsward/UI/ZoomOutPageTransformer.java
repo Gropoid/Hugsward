@@ -1,14 +1,16 @@
-package model;
+package org.gbe.hugsward.UI;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
 /**
  * Created by gbe on 9/11/15.
+ * Page Transformer for a zoom-out / zoom-in transition effect in the ViewPager.
+ * Taken from : http://developer.android.com/training/animation/screen-slide.html#pagetransformer
  */
 public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
-    private static final float MIN_SCALE = 0.90f;
-    private static final float MIN_ALPHA = 0.7f;
+    private static final float MIN_SCALE = 0.85f;
+    private static final float MIN_ALPHA = 0.5f;
 
     public void transformPage(View view, float position) {
         int pageWidth = view.getWidth();
