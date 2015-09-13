@@ -49,6 +49,9 @@ public class BookCardFragment extends Fragment {
     @Bind(R.id.counter)
     TextView tvCounter;
 
+    @Bind(R.id.tvBookTitle)
+    TextView tvBookTitle;
+
     @Bind(R.id.vPalette)
     View vPalette;
 
@@ -94,6 +97,7 @@ public class BookCardFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+        tvBookTitle.setText(mBook.getTitle());
         Picasso.with(getActivity()).load(mBook.getCover())
                 .placeholder(R.drawable.progress_wheel_animation)
                 .error(R.drawable.placeholder340_500)
@@ -159,6 +163,6 @@ public class BookCardFragment extends Fragment {
     private void onQuantityChanged() {
         btnMinusButton.setEnabled(!mCart.isAtMinOrdered(mBook));
         btnPlusButton.setEnabled(!mCart.isAtMaxOrdered(mBook));
-        tvCounter.setText(mCart.getQuantity(mBook).toString());
+        tvCounter.setText(getResources().getString(R.string.book_quantity_label) + mCart.getQuantity(mBook).toString());
     }
 }

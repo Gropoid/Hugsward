@@ -7,4 +7,5 @@
     <string name="total_price_label">Total price :</string>
     <string name="final_price_label">Final price :</string>
     <string name="connexion_error_label">Could not retrieve offers. Please check Internet connection.</string>
+    <string name="book_quantity_label">"Quantity in basket : "</string>
 </resources>

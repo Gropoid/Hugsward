@@ -4,7 +4,7 @@
     android:id="@+id/shopping_main_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/enough_room_for_card_shadow"/>
+    android:padding="0dp"/>
 
 
 
