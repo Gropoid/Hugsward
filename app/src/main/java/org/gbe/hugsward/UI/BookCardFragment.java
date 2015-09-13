@@ -52,6 +52,9 @@ public class BookCardFragment extends Fragment {
     @Bind(R.id.tvBookTitle)
     TextView tvBookTitle;
 
+    @Bind(R.id.tvBookPrice)
+    TextView tvBookPrice;
+
     @Bind(R.id.vPalette)
     View vPalette;
 
@@ -89,6 +92,7 @@ public class BookCardFragment extends Fragment {
             mCart = getArguments().getParcelable(BOOK_CART_PARCEL_KEY);
         }
         mTarget = new BookCoverTarget() ;
+        ButterKnife.setDebug(true);
         ButterKnife.bind(this, v);
 
         return v;
@@ -98,6 +102,7 @@ public class BookCardFragment extends Fragment {
     public void onResume(){
         super.onResume();
         tvBookTitle.setText(mBook.getTitle());
+        tvBookPrice.setText(getResources().getString(R.string.book_price_label) + mBook.getPrice());
         Picasso.with(getActivity()).load(mBook.getCover())
                 .placeholder(R.drawable.progress_wheel_animation)
                 .error(R.drawable.placeholder340_500)
@@ -133,6 +138,7 @@ public class BookCardFragment extends Fragment {
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             ivBookCover.setImageBitmap(bitmap);
             ivBookCover.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
             Palette.from(bitmap).generate(
                     new Palette.PaletteAsyncListener() {
                         @Override

@@ -8,4 +8,6 @@
     <string name="final_price_label">Final price :</string>
     <string name="connexion_error_label">Could not retrieve offers. Please check Internet connection.</string>
     <string name="book_quantity_label">"Quantity in basket : "</string>
+    <string name="book_price_placeholder">Price : 00.00 €</string>
+    <string name="book_price_label">Price : </string>
 </resources>

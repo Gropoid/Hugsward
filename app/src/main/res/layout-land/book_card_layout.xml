@@ -13,7 +13,7 @@
 
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_margin="@dimen/card_padding"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,70 +22,76 @@
             android:id="@+id/book_card_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="10"
-            android:scaleType="centerInside"
-            />
+
+            android:scaleType="fitCenter"
+            android:layout_weight=".65" />
 
         <View
             android:id="@+id/vPalette"
-            android:layout_height="5dp"
-            android:layout_width="match_parent"
-            android:layout_marginTop="1dp"
-            />
+            android:layout_height="match_parent"
+            android:layout_width="5dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="fill_horizontal|bottom"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:layout_height="match_parent"
+            android:layout_weight=".35"
+            android:layout_gravity="fill_horizontal"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_weight="0.85">
+                android:layout_height="0dp"
+                android:layout_weight=".7">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="The title of the book"
                     android:id="@+id/tvBookTitle"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_gravity="left" />
+                    android:layout_marginLeft="12sp"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="right"
+                android:layout_weight=".3">
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/book_price_placeholder"
-                        android:id="@+id/tvBookPrice"
-                        android:layout_gravity="right" />
+                        android:text="Price : 00.00 €"
+                        android:id="@+id/tvBookPrice" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Quantity in basket : 0"
+                        android:id="@+id/counter" />
                 </LinearLayout>
 
-                <TextView
+                <Button
+                    android:id="@+id/minus_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Quantity in basket : 0"
-                    android:layout_gravity="left"
-                    android:id="@+id/counter" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_weight="0.15">
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="-"/>
 
                 <Button
                     android:id="@+id/plus_button"
@@ -94,12 +100,6 @@
                     android:layout_weight="0.5"
                     android:text="+"/>
 
-                <Button
-                    android:id="@+id/minus_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:text="-"/>
             </LinearLayout>
 
         </LinearLayout>
