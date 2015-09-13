@@ -57,26 +57,30 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:orientation="horizontal"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="right"
                 android:layout_weight=".3">
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
-                    android:gravity="bottom">
+                    android:gravity="bottom"
+                    android:id="@+id/linearLayout2"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Price : 00.00 €"
-                        android:id="@+id/tvBookPrice" />
+                        android:id="@+id/tvBookPrice"
+                        android:text="@string/book_price_placeholder"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -91,16 +95,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:text="-"/>
+                    android:text="-"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/plus_button"
+                    android:layout_toStartOf="@+id/plus_button" />
 
                 <Button
                     android:id="@+id/plus_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:text="+"/>
+                    android:text="+"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
