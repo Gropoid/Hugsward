@@ -102,7 +102,7 @@ public class BookCardFragment extends Fragment {
     public void onResume(){
         super.onResume();
         tvBookTitle.setText(mBook.getTitle());
-        tvBookPrice.setText(getResources().getString(R.string.book_price_label) + mBook.getPrice());
+        tvBookPrice.setText(mBook.getPrice() + "€");
         Picasso.with(getActivity()).load(mBook.getCover())
                 .placeholder(R.drawable.progress_wheel_animation)
                 .error(R.drawable.placeholder340_500)
