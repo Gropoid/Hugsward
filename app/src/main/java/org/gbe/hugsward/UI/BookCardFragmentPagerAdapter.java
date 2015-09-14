@@ -12,8 +12,8 @@ import org.gbe.hugsward.model.BookCart;
  */
 public class BookCardFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    Book[] mBooks;
-    BookCart mCart;
+    private Book[] mBooks;
+    private BookCart mCart;
 
     public BookCardFragmentPagerAdapter(FragmentManager fm, Book[] books, BookCart cart) {
         super(fm);
@@ -28,8 +28,15 @@ public class BookCardFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
+        if (mBooks == null)
+            return 0;
         return mBooks.length;
     }
 
 
+    public void setData(Book[] books, BookCart cart) {
+        mBooks = books;
+        mCart = cart;
+        notifyDataSetChanged();
+    }
 }

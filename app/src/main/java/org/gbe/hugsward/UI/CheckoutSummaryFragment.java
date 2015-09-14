@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import org.gbe.hugsward.R;
 import org.gbe.hugsward.http.HenriPotierApi;
+import org.gbe.hugsward.http.HenriPotierSvc;
 import org.gbe.hugsward.model.BookCart;
 import org.gbe.hugsward.model.Offer;
 import org.gbe.hugsward.model.OfferList;
@@ -48,6 +49,9 @@ public class CheckoutSummaryFragment extends Fragment {
 
     private BookCartAdapter mAdapter;
 
+    //
+    private Call<OfferList> mCall;
+
     public CheckoutSummaryFragment() {
     }
 
@@ -82,11 +86,7 @@ public class CheckoutSummaryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        mHenriPotierService = new Retrofit.Builder()
-                .baseUrl("http://henri-potier.xebia.fr/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(HenriPotierApi.class);
+        mHenriPotierService = HenriPotierSvc.getInstance();
         populateFooterInfo();
     }
 
@@ -104,8 +104,9 @@ public class CheckoutSummaryFragment extends Fragment {
     }
 
     private void fetchOfferList() {
-        Call<OfferList> call = mHenriPotierService.getOffer(mBookCart.getRequestString());
-        call.enqueue(new Callback<OfferList>() {
+
+        mCall = mHenriPotierService.getOffer(mBookCart.getRequestString());
+        mCall.enqueue(new Callback<OfferList>() {
             @Override
             public void onResponse(Response<OfferList> response) {
                 mOfferList = response.body();
@@ -147,5 +148,13 @@ public class CheckoutSummaryFragment extends Fragment {
         public FooterViewHolder(View v) {
             ButterKnife.bind(this, v);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        if(mCall != null) {
+            mCall.cancel();
+        }
+        super.onDestroy();
     }
 }

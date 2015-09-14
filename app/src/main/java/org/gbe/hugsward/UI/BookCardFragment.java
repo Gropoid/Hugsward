@@ -76,11 +76,6 @@ public class BookCardFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity a) {
-        super.onAttach(a);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.book_card_layout, container, false);
@@ -101,13 +96,21 @@ public class BookCardFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        tvBookTitle.setText(mBook.getTitle());
-        tvBookPrice.setText(mBook.getPrice() + "€");
-        Picasso.with(getActivity()).load(mBook.getCover())
-                .placeholder(R.drawable.progress_wheel_animation)
-                .error(R.drawable.placeholder340_500)
-                .into(mTarget);
-        onQuantityChanged();
+        if (mBook == null){
+            tvBookTitle.setText(getString(R.string.book_retrieval_error));
+            tvBookPrice.setText("");
+            Picasso.with(getActivity()).load(R.drawable.placeholder340_500).fit().into(ivBookCover);
+            btnMinusButton.setEnabled(false);
+            btnPlusButton.setEnabled(false);
+        } else {
+            tvBookTitle.setText(mBook.getTitle());
+            tvBookPrice.setText(mBook.getPrice() + "€");
+            Picasso.with(getActivity()).load(mBook.getCover())
+                    .placeholder(R.drawable.progress_wheel_animation)
+                    .error(R.drawable.placeholder340_500)
+                    .into(mTarget);
+            onQuantityChanged();
+        }
     }
 
     @Override

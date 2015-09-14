@@ -1,5 +1,6 @@
 package org.gbe.hugsward.model;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -24,6 +25,7 @@ public class Book implements Parcelable {
         cover = p.readString();
         price = p.readInt();
     }
+
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

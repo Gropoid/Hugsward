@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class BookCart implements Parcelable {
     private static final int MAX_ORDER = 10;
-    Map<Book, Integer> mCart;
+    private Map<Book, Integer> mCart;
 
     public BookCart() {
         mCart = new Hashtable<>();
@@ -24,7 +24,7 @@ public class BookCart implements Parcelable {
         return mCart.size() == 0;
     }
 
-    protected BookCart(Parcel in) {
+    private BookCart(Parcel in) {
         mCart = new Hashtable<>();
         Integer size = in.readInt();
         for (int i = 0 ; i < size ; i++) {

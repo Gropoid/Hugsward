@@ -1,5 +1,6 @@
 package org.gbe.hugsward.http;
 
+import org.gbe.hugsward.model.Book;
 import org.gbe.hugsward.model.Offer;
 import org.gbe.hugsward.model.OfferList;
 
@@ -15,4 +16,7 @@ import retrofit.http.Path;
 public interface HenriPotierApi {
     @GET("/books/{isbnMap}/commercialOffers")
     Call<OfferList> getOffer(@Path("isbnMap") String isbnList);
+
+    @GET("/books")
+    Call<List<Book>> getBooks();
 }

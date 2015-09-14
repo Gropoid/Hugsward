@@ -14,9 +14,19 @@ import org.gbe.hugsward.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+
+import org.gbe.hugsward.http.HenriPotierApi;
+import org.gbe.hugsward.http.HenriPotierSvc;
 import org.gbe.hugsward.model.Book;
 import org.gbe.hugsward.model.BookCart;
 import org.gbe.hugsward.model.Dummy;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ShoppingActivity extends AppCompatActivity {
 
@@ -27,10 +37,13 @@ public class ShoppingActivity extends AppCompatActivity {
     @Bind(R.id.shopping_main_pager)
     ViewPager mPager;
 
-    BookCardFragmentPagerAdapter mAdapter;
+    private BookCardFragmentPagerAdapter mAdapter;
 
-    Book[] mBooks;
-    BookCart mCart;
+    private Book[] mBooks;
+    private BookCart mCart;
+
+    // Retrofit Call object is set as private member to allow cancellation.
+    private Call<List<Book>> mCall;
 
 
     @Override
@@ -41,20 +54,42 @@ public class ShoppingActivity extends AppCompatActivity {
         int current_page = 0;
         if(savedInstanceState == null) {
             mCart = new BookCart();
-            Gson gson = new Gson();
-            mBooks = gson.fromJson(Dummy.JsonAllBooks, Book[].class);
+            mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
+            mPager.setAdapter(mAdapter);
+            mPager.setPageTransformer(false, new ZoomOutPageTransformer());
+            mPager.setOffscreenPageLimit(5);
+            fetchBookList();
         }
         else {
             mCart = savedInstanceState.getParcelable(BOOK_CART_KEY);
             mBooks = (Book[])savedInstanceState.getParcelableArray(BOOK_LIST_KEY);
             current_page = savedInstanceState.getInt(CURRENT_PAGE_KEY, 0);
+            mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
+            mPager.setAdapter(mAdapter);
+            mPager.setPageTransformer(false, new ZoomOutPageTransformer());
+            mPager.setOffscreenPageLimit(5);
         }
-        mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
-
-        mPager.setAdapter(mAdapter);
-        mPager.setPageTransformer(false, new ZoomOutPageTransformer());
-        mPager.setOffscreenPageLimit(1);
         mPager.setCurrentItem(current_page, true);
+    }
+
+    private void fetchBookList() {
+        HenriPotierApi svc = HenriPotierSvc.getInstance();
+
+        mCall = svc.getBooks();
+        mCall.enqueue(new Callback<List<Book>>() {
+            @Override
+            public void onResponse(Response<List<Book>> response) {
+                mBooks = response.body().toArray(new Book[response.body().size()]);
+                mAdapter.setData(mBooks, mCart);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                mBooks = new Book[]{null};
+                mAdapter.setData(mBooks, mCart);
+                Toast.makeText(getBaseContext(), "Internet access failed. Please try again later.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -67,7 +102,6 @@ public class ShoppingActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_shopping, menu);
         return true;
     }
@@ -88,4 +122,11 @@ public class ShoppingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onDestroy() {
+        if (mCall != null) {
+            mCall.cancel();
+        }
+        super.onDestroy();
+    }
 }

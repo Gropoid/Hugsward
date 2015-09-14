@@ -11,6 +11,13 @@ public final class Dummy {
             "            \"    \\\"cover\\\": \\\"http://henri-potier.xebia.fr/hp0.jpg\\\"\\n\" +\n" +
             "            \"  }";
 
+    public static final String PlaceHolder = "{\n" +
+            "    \"isbn\": \"\",\n" +
+            "    \"title\": \"Connection error, please check your internet access\",\n" +
+            "    \"price\": 0,\n" +
+            "    \"cover\": \"\"\n" +
+            "}";
+
     public static final String JsonAllBooks = "[\n" +
             "  {\n" +
             "    \"isbn\": \"c8fabf68-8374-48fe-a7ea-a00ccd07afff\",\n" +
