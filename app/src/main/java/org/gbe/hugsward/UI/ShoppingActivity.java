@@ -108,14 +108,7 @@ public class ShoppingActivity extends AppCompatActivity {
         setNetworkStatusListener();
     }
 
-    private void setNetworkStatusListener() {
-        if(mReceiver != null) {
-            unregisterReceiver(mReceiver);
-        }
-        mReceiver = new NetworkStatusReceiver();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(mReceiver, filter);
-    }
+
 
     @Override
     public void onSaveInstanceState(Bundle b){
@@ -155,6 +148,15 @@ public class ShoppingActivity extends AppCompatActivity {
             unregisterReceiver(mReceiver);
         }
         super.onDestroy();
+    }
+
+    private void setNetworkStatusListener() {
+        if(mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
+        mReceiver = new NetworkStatusReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mReceiver, filter);
     }
 
     private boolean isNetworkAvailable() {

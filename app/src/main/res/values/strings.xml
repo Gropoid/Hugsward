@@ -6,7 +6,8 @@
     <string name="action_settings">Settings</string>
     <string name="total_price_label">Total price :</string>
     <string name="final_price_label">Final price :</string>
-    <string name="connexion_error_label">Could not retrieve offers. Please check Internet connection.</string>
+    <string name="connexion_error_label">Could not retrieve offers. Please check your Internet
+        connection.</string>
     <string name="book_quantity_label">"Quantity in basket : "</string>
     <string name="book_price_placeholder">00.00 €</string>
     <string name="book_price_label">Price : </string>
