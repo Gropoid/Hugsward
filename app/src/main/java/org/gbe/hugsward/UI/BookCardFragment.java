@@ -75,11 +75,17 @@ public class BookCardFragment extends Fragment {
         return f;
     }
 
+    // necessary for use in the adapter
+    Book getBook()
+    {
+        return mBook;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.book_card_layout, container, false);
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null ) {
             mBook = savedInstanceState.getParcelable(BOOK_PARCEL_KEY);
             mCart = savedInstanceState.getParcelable(BOOK_CART_PARCEL_KEY);
         } else {
@@ -99,7 +105,7 @@ public class BookCardFragment extends Fragment {
         if (mBook == null){
             tvBookTitle.setText(getString(R.string.book_retrieval_error));
             tvBookPrice.setText("");
-            Picasso.with(getActivity()).load(R.drawable.placeholder340_500).fit().into(ivBookCover);
+            Picasso.with(getActivity()).load(R.drawable.videostatic).fit().into(ivBookCover);
             btnMinusButton.setEnabled(false);
             btnPlusButton.setEnabled(false);
         } else {
@@ -107,7 +113,7 @@ public class BookCardFragment extends Fragment {
             tvBookPrice.setText(mBook.getPrice() + "€");
             Picasso.with(getActivity()).load(mBook.getCover())
                     .placeholder(R.drawable.progress_wheel_animation)
-                    .error(R.drawable.placeholder340_500)
+                    .error(R.drawable.videostatic)
                     .into(mTarget);
             onQuantityChanged();
         }
@@ -115,9 +121,11 @@ public class BookCardFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(BOOK_PARCEL_KEY, mBook);
-        outState.putParcelable(BOOK_CART_PARCEL_KEY, mCart);
+        if(mBook != null) {  // do not save state if we are destroying a placeholder
+            super.onSaveInstanceState(outState);
+            outState.putParcelable(BOOK_PARCEL_KEY, mBook);
+            outState.putParcelable(BOOK_CART_PARCEL_KEY, mCart);
+        }
     }
 
     @OnClick(R.id.plus_button)
@@ -167,7 +175,6 @@ public class BookCardFragment extends Fragment {
             ivBookCover.setImageDrawable(placeHolderDrawable);
         }
     }
-
 
     private void onQuantityChanged() {
         btnMinusButton.setEnabled(!mCart.isAtMinOrdered(mBook));

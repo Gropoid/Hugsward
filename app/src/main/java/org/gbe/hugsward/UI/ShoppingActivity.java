@@ -1,6 +1,11 @@
 package org.gbe.hugsward.UI;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,7 +49,7 @@ public class ShoppingActivity extends AppCompatActivity {
 
     // Retrofit Call object is set as private member to allow cancellation.
     private Call<List<Book>> mCall;
-
+    private NetworkStatusReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,6 @@ public class ShoppingActivity extends AppCompatActivity {
             mPager.setAdapter(mAdapter);
             mPager.setPageTransformer(false, new ZoomOutPageTransformer());
             mPager.setOffscreenPageLimit(5);
-            fetchBookList();
         }
         else {
             mCart = savedInstanceState.getParcelable(BOOK_CART_KEY);
@@ -69,6 +73,13 @@ public class ShoppingActivity extends AppCompatActivity {
             mPager.setPageTransformer(false, new ZoomOutPageTransformer());
             mPager.setOffscreenPageLimit(5);
         }
+
+        if (isNetworkAvailable()) {
+            fetchBookList();
+        } else {
+            onConnectionFailed();
+        }
+
         mPager.setCurrentItem(current_page, true);
     }
 
@@ -85,11 +96,25 @@ public class ShoppingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                mBooks = new Book[]{null};
-                mAdapter.setData(mBooks, mCart);
-                Toast.makeText(getBaseContext(), "Internet access failed. Please try again later.", Toast.LENGTH_LONG).show();
+                onConnectionFailed();
             }
         });
+    }
+
+    private void onConnectionFailed() {
+        mBooks = new Book[]{null};
+        mAdapter.setData(mBooks, mCart);
+        Toast.makeText(getBaseContext(), "Internet access failed. Please try again later.", Toast.LENGTH_LONG).show();
+        setNetworkStatusListener();
+    }
+
+    private void setNetworkStatusListener() {
+        if(mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
+        mReceiver = new NetworkStatusReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -118,7 +143,6 @@ public class ShoppingActivity extends AppCompatActivity {
             startActivity(i);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -127,6 +151,25 @@ public class ShoppingActivity extends AppCompatActivity {
         if (mCall != null) {
             mCall.cancel();
         }
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
         super.onDestroy();
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public class NetworkStatusReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent){
+            if(isNetworkAvailable()) {
+                fetchBookList();
+            }
+        }
     }
 }
