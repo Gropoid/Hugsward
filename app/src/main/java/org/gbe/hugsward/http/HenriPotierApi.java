@@ -15,7 +15,7 @@ import retrofit.http.Path;
  */
 public interface HenriPotierApi {
     @GET("/books/{isbnMap}/commercialOffers")
-    Call<OfferList> getOffer(@Path("isbnMap") String isbnList);
+    Call<OfferList> getOffers(@Path("isbnMap") String isbnList);
 
     @GET("/books")
     Call<List<Book>> getBooks();

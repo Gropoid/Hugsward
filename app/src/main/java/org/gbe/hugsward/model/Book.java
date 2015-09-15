@@ -4,9 +4,11 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.gbe.hugsward.http.HenriPotierApi;
+
 /**
  * Created by gbe on 9/9/15.
- * Represents a Henri Potier book
+ *  Parcelable class to represent a Henri Potier book. Can be deserialized from {@link HenriPotierApi#getBooks()}.
  */
 public class Book implements Parcelable {
     private String isbn;

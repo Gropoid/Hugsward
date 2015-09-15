@@ -21,16 +21,11 @@ import org.gbe.hugsward.model.BookCart;
 import org.gbe.hugsward.model.Offer;
 import org.gbe.hugsward.model.OfferList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.Call;
 import retrofit.Callback;
-import retrofit.GsonConverterFactory;
 import retrofit.Response;
-import retrofit.Retrofit;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -97,7 +92,6 @@ public class CheckoutSummaryFragment extends Fragment {
     }
 
     private void populateFooterInfo() {
-//        mFooter.findViewById()
         mTotalPrice = mBookCart.getTotalPrice();
         mFooter.tvTotal.setText(String.format( "%.2f €", mTotalPrice ));
         mFooter.tvDiscount.setText("Looking for the best discount...");
@@ -115,7 +109,7 @@ public class CheckoutSummaryFragment extends Fragment {
 
     private void fetchOfferList() {
 
-        mCall = mHenriPotierService.getOffer(mBookCart.getRequestString());
+        mCall = mHenriPotierService.getOffers(mBookCart.getRequestString());
         mCall.enqueue(new Callback<OfferList>() {
             @Override
             public void onResponse(Response<OfferList> response) {

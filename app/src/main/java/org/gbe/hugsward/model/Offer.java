@@ -2,7 +2,7 @@ package org.gbe.hugsward.model;
 
 /**
  * Created by gbe on 9/12/15.
- *
+ *  An offer as returned by {@link org.gbe.hugsward.http.HenriPotierApi#getOffers(String)}
  */
 public class Offer {
     private String type;
@@ -11,12 +11,22 @@ public class Offer {
 
     private transient DiscountCalculator calculator;
 
+
+    /**
+     * calculate the discounted price
+     * @param price a price to make the calculation on.
+     * @return the discounted price after applying this {@link Offer}'s discount.
+     */
     public float applyDiscount(float price){
         if (calculator == null)
             setDiscountCalculator();
         return calculator.calculateDiscount(price);
     }
 
+    /**
+     * provides a descriptive string for this {@link Offer}
+     * @return a short string, such as "- 15%"
+     */
     public String getDescriptionString() {
         if (calculator == null)
             setDiscountCalculator();

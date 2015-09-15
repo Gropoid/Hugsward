@@ -9,8 +9,11 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.gbe.hugsward.http.HenriPotierApi;
+
 /**
  * Created by gbe on 9/10/15.
+ * Parcelable class to model a Henri Potier book purchase cart.
  */
 public class BookCart implements Parcelable {
     private static final int MAX_ORDER = 10;
@@ -42,6 +45,11 @@ public class BookCart implements Parcelable {
         return mCart.get(b) == null;
     }
 
+    /**
+     * Adds one book to the cart, up to a maximum (hardcoded 10).
+     *
+     * @param b the book to purchase.
+     */
     public void add(Book b) {
         if (!mCart.containsKey(b)) {
             mCart.put(b, 1);
@@ -53,6 +61,10 @@ public class BookCart implements Parcelable {
         }
     }
 
+    /**
+     * Removes one book from the cart. If no copy of this book is in the cart, does nothing.
+     * @param b the book to remove from the cart.
+     */
     public void remove(Book b) {
         if (!mCart.containsKey(b)) return;
         if (!isAtMinOrdered(b)) {
@@ -63,6 +75,11 @@ public class BookCart implements Parcelable {
         }
     }
 
+    /**
+     * Sets the number of copies of a given book in the cart.
+     * @param book which book
+     * @param newQuantity quantity of the given book to have in the cart after update.
+     */
     public void update(Book book, Integer newQuantity){
         mCart.put(book, newQuantity);
         if(mCart.get(book) == 0 ) {
@@ -70,6 +87,11 @@ public class BookCart implements Parcelable {
         }
     }
 
+    /**
+     * Returns the quantity of this book that are currently present in the cart.
+     * @param b which book
+     * @return how many copies of this book are currently present in the cart.
+     */
     public Integer getQuantity(Book b) {
         if (mCart.containsKey(b)) {
             return mCart.get(b);
@@ -79,6 +101,11 @@ public class BookCart implements Parcelable {
         }
     }
 
+    /**
+     * Generates a comma-separated list of ISBN codes for all books currently in the cart.
+     * This complies with the Henri Potier API's {@link HenriPotierApi#getOffers(String) getOffers()} argument format.
+     * @return
+     */
     public String getRequestString() {
         String rv = new String();
         if (mCart.isEmpty()) {
@@ -96,6 +123,10 @@ public class BookCart implements Parcelable {
         }
     }
 
+    /**
+     * Accessor to the cart contents.
+     * @return a list of books associated with their quantities in the cart.
+     */
     public List<Pair<Book, Integer>> getCartContents() {
         List<Pair<Book, Integer>> list = new ArrayList<>();
         for(Map.Entry e : mCart.entrySet()) {
@@ -130,6 +161,10 @@ public class BookCart implements Parcelable {
         }
     }
 
+    /**
+     * Gets the total price of the contents of the cart. This does account for any discount.
+     * @return the sum of the prices of all items in the cart.
+     */
     public float getTotalPrice() {
         float x = 0;
         for(Book b : mCart.keySet()) {

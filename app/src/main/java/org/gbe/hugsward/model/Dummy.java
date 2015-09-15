@@ -2,6 +2,7 @@ package org.gbe.hugsward.model;
 
 /**
  * Created by gbe on 9/10/15.
+ * Dummy class for testing purposes.
  */
 public final class Dummy {
     public static final String JsonOneBook = "{\\n\" +\n" +
