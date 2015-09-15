@@ -33,6 +33,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * Hugsward's main activity. Displays {@link BookCardFragment}s via a {@link ViewPager}.
+ */
 public class ShoppingActivity extends AppCompatActivity {
 
     private static final String BOOK_CART_KEY = "BookCart";
@@ -47,7 +51,7 @@ public class ShoppingActivity extends AppCompatActivity {
     private Book[] mBooks;
     private BookCart mCart;
 
-    // Retrofit Call object is set as private member to allow cancellation.
+    // Retrofit Call object is set as  member to allow cancellation.
     private Call<List<Book>> mCall;
     private NetworkStatusReceiver mReceiver;
 
@@ -104,11 +108,8 @@ public class ShoppingActivity extends AppCompatActivity {
     private void onConnectionFailed() {
         mBooks = new Book[]{null};
         mAdapter.setData(mBooks, mCart);
-        Toast.makeText(getBaseContext(), "Internet access failed. Please try again later.", Toast.LENGTH_LONG).show();
         setNetworkStatusListener();
     }
-
-
 
     @Override
     public void onSaveInstanceState(Bundle b){
@@ -141,11 +142,16 @@ public class ShoppingActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
+        // Cancel Retrofit call and unregister the Broadcast receiver
         if (mCall != null) {
             mCall.cancel();
         }
         if (mReceiver != null) {
-            unregisterReceiver(mReceiver);
+            try {
+                unregisterReceiver(mReceiver);
+            } catch (IllegalArgumentException ex) {
+                // Do nothing, this gets thrown if the receiver is not registered.
+            }
         }
         super.onDestroy();
     }

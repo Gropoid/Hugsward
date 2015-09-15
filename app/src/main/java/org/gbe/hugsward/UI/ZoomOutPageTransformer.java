@@ -4,7 +4,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 /**
- * Created by gbe on 9/11/15.
  * Page Transformer for a zoom-out / zoom-in transition effect in the ViewPager.
  * Taken from : http://developer.android.com/training/animation/screen-slide.html#pagetransformer
  */

@@ -27,7 +27,7 @@ import org.gbe.hugsward.model.Book;
 import org.gbe.hugsward.model.BookCart;
 
 /**
- * The fragment for adding or removing a given book from the shopping cart
+ * The fragment for adding or removing a given book from the shopping cart.
  */
 public class BookCardFragment extends Fragment {
 
