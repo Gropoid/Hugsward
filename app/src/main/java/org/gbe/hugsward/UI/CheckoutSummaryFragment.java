@@ -1,12 +1,6 @@
 package org.gbe.hugsward.UI;
 
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +45,7 @@ public class CheckoutSummaryFragment extends Fragment {
     private BookCartAdapter mAdapter;
 
     private Call<OfferList> mCall;
-    private NetworkStatusReceiver mReceiver;
+    private NetworkStatusMonitor mNetwork;
 
     public CheckoutSummaryFragment() {
     }
@@ -88,6 +82,12 @@ public class CheckoutSummaryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mHenriPotierService = HenriPotierSvc.getInstance();
+        mNetwork = new NetworkStatusMonitor(getActivity(), new Runnable() {
+            @Override
+            public void run() {
+                fetchOfferList();
+            }
+        });
         populateFooterInfo();
     }
 
@@ -99,10 +99,10 @@ public class CheckoutSummaryFragment extends Fragment {
         if (mBookCart.isEmpty()) {
             mFooter.tvDiscount.setText("");
         }else {
-            if(isNetworkAvailable()) {
+            if(mNetwork.isNetworkAvailable()) {
                 fetchOfferList();
             } else {
-                setNetworkStatusListener();  //TODO: (Context, Callback)
+                mNetwork.setListener();  //
             }
         }
     }
@@ -115,12 +115,12 @@ public class CheckoutSummaryFragment extends Fragment {
             public void onResponse(Response<OfferList> response) {
                 mOfferList = response.body();
                 applyBestOffer();
-                unSetNetworkStatusListener();
+                mNetwork.unsetListener();
             }
 
             @Override
             public void onFailure(Throwable t) {
-                setNetworkStatusListener();
+                mNetwork.setListener();
                 showConnexionError();
             }
         });
@@ -161,41 +161,8 @@ public class CheckoutSummaryFragment extends Fragment {
         if(mCall != null) {
             mCall.cancel();
         }
-        unSetNetworkStatusListener();
+        mNetwork.unsetListener(); // unregister the receiver
         super.onDestroy();
     }
 
-    private void unSetNetworkStatusListener() {
-        if(mReceiver != null) {
-            try {
-                getActivity().unregisterReceiver(mReceiver);
-            } catch (IllegalArgumentException ex) {
-                // Do nothing, we just want to make sure it's not registered anymore.
-            }
-        }
-    }
-
-    // TODO: Extract into a class
-    private void setNetworkStatusListener() {
-        unSetNetworkStatusListener();
-        mReceiver = new NetworkStatusReceiver();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        getActivity().registerReceiver(mReceiver, filter);
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public class NetworkStatusReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent){
-            if(isNetworkAvailable()) {
-                fetchOfferList();
-            }
-        }
-    }
 }

@@ -172,4 +172,25 @@ public class BookCart implements Parcelable {
         }
         return x;
     }
+
+    /**
+     * Updates the references to books in this cart while maintaining the quantities.
+     * @param books fresh list of books. If books in the cart are equals to books in mBooks,
+     *               their references will be refreshed.
+     */
+    public void refresh(Book[] books) {
+        Map<Book, Integer> freshCart = new Hashtable<>();
+
+        for(Map.Entry<Book, Integer> e : mCart.entrySet()) {
+            Book b = e.getKey();
+            Integer qty = e.getValue();
+            for (Book newbook : books) {
+                if (newbook.equals(e.getKey())) {
+                    freshCart.put(newbook, e.getValue());
+                    break;
+                }
+            }
+        }
+        mCart = freshCart;
+    }
 }

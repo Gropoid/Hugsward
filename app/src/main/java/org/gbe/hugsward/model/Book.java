@@ -28,7 +28,6 @@ public class Book implements Parcelable {
         price = p.readInt();
     }
 
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(isbn);
@@ -80,4 +79,29 @@ public class Book implements Parcelable {
     public void setCover(String cover) {
         this.cover = cover;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        if (getPrice() != book.getPrice()) return false;
+        if (!getIsbn().equals(book.getIsbn())) return false;
+        if (!getTitle().equals(book.getTitle())) return false;
+        return getCover().equals(book.getCover());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = isbn.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + price;
+        result = 31 * result + cover.hashCode();
+        return result;
+    }
+
 }

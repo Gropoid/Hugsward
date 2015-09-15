@@ -53,7 +53,7 @@ public class ShoppingActivity extends AppCompatActivity {
 
     // Retrofit Call object is set as  member to allow cancellation.
     private Call<List<Book>> mCall;
-    private NetworkStatusReceiver mReceiver;
+    private NetworkStatusMonitor mNetwork;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,12 @@ public class ShoppingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shopping);
         ButterKnife.bind(this);
         int current_page = 0;
+        mNetwork = new NetworkStatusMonitor(this, new Runnable() {
+            @Override
+            public void run() {
+                fetchBookList();
+            }
+        });
         if(savedInstanceState == null) {
             mCart = new BookCart();
             mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
@@ -78,13 +84,17 @@ public class ShoppingActivity extends AppCompatActivity {
             mPager.setOffscreenPageLimit(5);
         }
 
-        if (isNetworkAvailable()) {
+        mPager.setCurrentItem(current_page, true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mNetwork.isNetworkAvailable()) {
             fetchBookList();
         } else {
             onConnectionFailed();
         }
-
-        mPager.setCurrentItem(current_page, true);
     }
 
     private void fetchBookList() {
@@ -95,7 +105,9 @@ public class ShoppingActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response<List<Book>> response) {
                 mBooks = response.body().toArray(new Book[response.body().size()]);
+                mCart.refresh(mBooks);
                 mAdapter.setData(mBooks, mCart);
+                mNetwork.unsetListener();
             }
 
             @Override
@@ -108,7 +120,7 @@ public class ShoppingActivity extends AppCompatActivity {
     private void onConnectionFailed() {
         mBooks = new Book[]{null};
         mAdapter.setData(mBooks, mCart);
-        setNetworkStatusListener();
+        mNetwork.setListener();
     }
 
     @Override
@@ -146,38 +158,9 @@ public class ShoppingActivity extends AppCompatActivity {
         if (mCall != null) {
             mCall.cancel();
         }
-        if (mReceiver != null) {
-            try {
-                unregisterReceiver(mReceiver);
-            } catch (IllegalArgumentException ex) {
-                // Do nothing, this gets thrown if the receiver is not registered.
-            }
-        }
+        mNetwork.unsetListener();
         super.onDestroy();
     }
 
-    private void setNetworkStatusListener() {
-        if(mReceiver != null) {
-            unregisterReceiver(mReceiver);
-        }
-        mReceiver = new NetworkStatusReceiver();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(mReceiver, filter);
-    }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public class NetworkStatusReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent){
-            if(isNetworkAvailable()) {
-                fetchBookList();
-            }
-        }
-    }
 }
