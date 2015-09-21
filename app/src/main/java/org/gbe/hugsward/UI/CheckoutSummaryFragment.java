@@ -113,15 +113,19 @@ public class CheckoutSummaryFragment extends Fragment {
         mCall.enqueue(new Callback<OfferList>() {
             @Override
             public void onResponse(Response<OfferList> response) {
-                mOfferList = response.body();
-                applyBestOffer();
-                mNetwork.unsetListener();
+                if (getView()!= null) {
+                    mOfferList = response.body();
+                    applyBestOffer();
+                    mNetwork.unsetListener();
+                }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                mNetwork.setListener();
-                showConnexionError();
+                if (getView() != null) {
+                    mNetwork.setListener();
+                    showConnexionError();
+                }
             }
         });
     }
