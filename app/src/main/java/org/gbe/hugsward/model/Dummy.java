@@ -5,12 +5,12 @@ package org.gbe.hugsward.model;
  * Dummy class for testing purposes.
  */
 public final class Dummy {
-    public static final String JsonOneBook = "{\\n\" +\n" +
-            "            \"    \\\"isbn\\\": \\\"c8fabf68-8374-48fe-a7ea-a00ccd07afff\\\",\\n\" +\n" +
-            "            \"    \\\"title\\\": \\\"Henri Potier à l'école des sorciers\\\",\\n\" +\n" +
-            "            \"    \\\"price\\\": 35,\\n\" +\n" +
-            "            \"    \\\"cover\\\": \\\"http://henri-potier.xebia.fr/hp0.jpg\\\"\\n\" +\n" +
-            "            \"  }";
+    public static final String JsonOneBook = "  {\n" +
+            "    \"isbn\": \"c8fabf68-8374-48fe-a7ea-a00ccd07afff\",\n" +
+            "    \"title\": \"Henri Potier à l'école des sorciers\",\n" +
+            "    \"price\": 35,\n" +
+            "    \"cover\": \"http://henri-potier.xebia.fr/hp0.jpg\"\n" +
+            "  },\n";
 
     public static final String PlaceHolder = "{\n" +
             "    \"isbn\": \"\",\n" +
