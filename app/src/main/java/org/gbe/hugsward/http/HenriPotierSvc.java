@@ -10,17 +10,12 @@ import retrofit.Retrofit;
 public class HenriPotierSvc {
 
     private static final String BASE_URL = "http://henri-potier.xebia.fr/";
-    private static HenriPotierApi mHenriPotierSvc;
+    private static HenriPotierApi mHenriPotierSvc = new Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(HenriPotierApi.class);
 
-    public static synchronized HenriPotierApi getInstance() {
-        if (mHenriPotierSvc == null)
-        {
-            return new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(HenriPotierApi.class);
-        } else {
-            return mHenriPotierSvc;
-        }
+    public static HenriPotierApi getInstance() {
+        return mHenriPotierSvc;
     }
 }
