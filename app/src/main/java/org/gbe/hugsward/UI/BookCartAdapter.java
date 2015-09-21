@@ -16,6 +16,9 @@ import org.gbe.hugsward.model.BookCart;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by gbe on 9/11/15.
  */
@@ -31,29 +34,37 @@ public class BookCartAdapter extends ArrayAdapter<Pair<Book, Integer>> {
         Pair<Book, Integer> item = getItem(position);
         VH holder;
         if (convertView == null) {
-            holder = new VH();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.cart_summary_item, parent, false);
-            holder.tvTitle = (TextView)convertView.findViewById(R.id.tvBookTitle);
-            holder.tvUnitPrice = (TextView)convertView.findViewById(R.id.tvBookUnitPrice);
-            holder.tvQuantity = (TextView)convertView.findViewById(R.id.tvBookQuantity);
-            holder.tvTotalPrice = (TextView)convertView.findViewById(R.id.tvBookTotalPrice);
+            holder = new VH(convertView);
+//            holder.tvTitle = (TextView)convertView.findViewById(R.id.tvBookTitle);
+//            holder.tvUnitPrice = (TextView)convertView.findViewById(R.id.tvBookUnitPrice);
+//            holder.tvQuantity = (TextView)convertView.findViewById(R.id.tvBookQuantity);
+//            holder.tvTotalPrice = (TextView)convertView.findViewById(R.id.tvBookTotalPrice);
             convertView.setTag(holder);
-        }else {
+        } else {
             holder = (VH)convertView.getTag();
         }
         holder.tvTitle.setText(item.first.getTitle());
         holder.tvUnitPrice.setText(String.format("%.2f €", (float)item.first.getPrice()));
         holder.tvQuantity.setText("Qty : " + item.second.toString());
-        holder.tvTotalPrice.setText(String.format("%.2f €", (float)item.first.getPrice() * item.second));
+        holder.tvTotalPrice.setText(String.format("%.2f €", (float) item.first.getPrice() * item.second));
         return convertView;
     }
 
-    private static class VH {
+    static class VH {
+        @Bind(R.id.tvBookTitle)
         TextView tvTitle;
+        @Bind (R.id.tvBookUnitPrice)
         TextView tvUnitPrice;
+        @Bind(R.id.tvBookQuantity)
         TextView tvQuantity;
+        @Bind(R.id.tvBookTotalPrice)
         TextView tvTotalPrice;
+
+        public VH(View v) {
+            ButterKnife.bind(this, v);
+        }
     }
 }
 
