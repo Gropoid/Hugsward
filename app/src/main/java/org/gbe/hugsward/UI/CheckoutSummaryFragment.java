@@ -15,7 +15,7 @@ import org.gbe.hugsward.model.BookCart;
 import org.gbe.hugsward.model.Offer;
 import org.gbe.hugsward.model.OfferList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit.Call;
 import retrofit.Callback;
@@ -32,7 +32,7 @@ public class CheckoutSummaryFragment extends Fragment {
 
     private HenriPotierApi mHenriPotierService;
 
-    @Bind(R.id.checkout_summary_listview)
+    @BindView(R.id.checkout_summary_listview)
     ListView lvCheckoutSummary;
 
     FooterViewHolder mFooter;
@@ -148,11 +148,11 @@ public class CheckoutSummaryFragment extends Fragment {
     }
 
     public static class FooterViewHolder {
-        @Bind(R.id.tvTotalPrice)
+        @BindView(R.id.tvTotalPrice)
         TextView tvTotal;
-        @Bind(R.id.tvAppliedDiscount)
+        @BindView(R.id.tvAppliedDiscount)
         TextView tvDiscount;
-        @Bind(R.id.tvFinalPrice)
+        @BindView(R.id.tvFinalPrice)
         TextView tvFinalPrice;
 
         public FooterViewHolder(View v) {

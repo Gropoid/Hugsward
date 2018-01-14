@@ -1,8 +1,7 @@
 package org.gbe.hugsward.UI;
 
-import android.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.view.View;
 import org.gbe.hugsward.R;
 import org.gbe.hugsward.model.BookCart;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CheckoutActivity extends AppCompatActivity {
@@ -18,7 +17,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private static final String BOOK_CART_KEY = "BookCart";
     private static final String CHECKOUT_FRAGMENT_TAG = "CheckoutFragment";
 
-    @Bind(R.id.checkout_frame)
+    @BindView(R.id.checkout_frame)
     View vMain;
 
     @Override

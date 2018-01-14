@@ -1,7 +1,6 @@
 package org.gbe.hugsward.UI;
 
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,12 +18,12 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.gbe.hugsward.R;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import org.gbe.hugsward.model.Book;
 import org.gbe.hugsward.model.BookCart;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * The fragment for adding or removing a given book from the shopping cart.
@@ -34,28 +33,28 @@ public class BookCardFragment extends Fragment {
     private static final String BOOK_PARCEL_KEY = "Book";
     private static final String BOOK_CART_PARCEL_KEY = "BookCart";
 
-    @Bind(R.id.book_card)
+    @BindView(R.id.book_card)
     CardView cvBookCard;
 
-    @Bind(R.id.book_card_image)
+    @BindView(R.id.book_card_image)
     ImageView ivBookCover;
 
-    @Bind(R.id.plus_button)
+    @BindView(R.id.plus_button)
     Button btnPlusButton;
 
-    @Bind(R.id.minus_button)
+    @BindView(R.id.minus_button)
     Button btnMinusButton;
 
-    @Bind(R.id.counter)
+    @BindView(R.id.counter)
     TextView tvCounter;
 
-    @Bind(R.id.tvBookTitle)
+    @BindView(R.id.tvBookTitle)
     TextView tvBookTitle;
 
-    @Bind(R.id.tvBookPrice)
+    @BindView(R.id.tvBookPrice)
     TextView tvBookPrice;
 
-    @Bind(R.id.vPalette)
+    @BindView(R.id.vPalette)
     View vPalette;
 
     private Book mBook;

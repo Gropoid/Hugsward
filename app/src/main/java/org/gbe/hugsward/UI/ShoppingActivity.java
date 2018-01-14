@@ -1,37 +1,25 @@
 package org.gbe.hugsward.UI;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import org.gbe.hugsward.R;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-
 import org.gbe.hugsward.http.HenriPotierApi;
 import org.gbe.hugsward.http.HenriPotierSvc;
 import org.gbe.hugsward.model.Book;
 import org.gbe.hugsward.model.BookCart;
-import org.gbe.hugsward.model.Dummy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
 
 
 /**
@@ -43,7 +31,7 @@ public class ShoppingActivity extends AppCompatActivity {
     private static final String BOOK_LIST_KEY = "BookList";
     private static final String CURRENT_PAGE_KEY = "CurrentPage";
 
-    @Bind(R.id.shopping_main_pager)
+    @BindView(R.id.shopping_main_pager)
     ViewPager mPager;
 
     private BookCardFragmentPagerAdapter mAdapter;
@@ -51,7 +39,7 @@ public class ShoppingActivity extends AppCompatActivity {
     private Book[] mBooks;
     private BookCart mCart;
 
-    // Retrofit Call object is set as  member to allow cancellation.
+    // Retrofit Call object is set as member to allow cancellation.
     private Call<List<Book>> mCall;
     private NetworkStatusMonitor mNetwork;
 
@@ -67,16 +55,15 @@ public class ShoppingActivity extends AppCompatActivity {
                 fetchBookList();
             }
         });
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             mCart = new BookCart();
             mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
             mPager.setAdapter(mAdapter);
             mPager.setPageTransformer(false, new ZoomOutPageTransformer());
             mPager.setOffscreenPageLimit(5);
-        }
-        else {
+        } else {
             mCart = savedInstanceState.getParcelable(BOOK_CART_KEY);
-            mBooks = (Book[])savedInstanceState.getParcelableArray(BOOK_LIST_KEY);
+            mBooks = (Book[]) savedInstanceState.getParcelableArray(BOOK_LIST_KEY);
             current_page = savedInstanceState.getInt(CURRENT_PAGE_KEY, 0);
             mAdapter = new BookCardFragmentPagerAdapter(getSupportFragmentManager(), mBooks, mCart);
             mPager.setAdapter(mAdapter);
@@ -124,7 +111,7 @@ public class ShoppingActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle b){
+    public void onSaveInstanceState(Bundle b) {
         super.onSaveInstanceState(b);
         b.putParcelable(BOOK_CART_KEY, mCart);
         b.putParcelableArray(BOOK_LIST_KEY, mBooks);
